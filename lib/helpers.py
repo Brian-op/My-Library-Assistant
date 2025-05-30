@@ -1,6 +1,8 @@
 from models.books import Book
-from models.borrowers import Member
+from models.authors import Author
+from models.borrowers import Borrower
 from models.borrowing import Borrowing
+
 
 def exit_program():
     print("Goodbye!")
@@ -11,7 +13,7 @@ from models.authors import Author
 
 def add_book():
     name = input("Enter book title: ")
-    author_name = input("Enter the authors name: ")
+    author_name = input("Enter the author's name: ")
 
     author = Author.find_by_name(author_name)
     if not author:
@@ -33,15 +35,15 @@ def list_books():
 
 def add_borrower():
     name = input("Enter borrower's name: ")
-    borrower = borrower(name=name)
+    borrower = Borrower(name=name)
     borrower.save()
     print(f"Borrower '{borrower.name}' added successfully!")
 
 def list_borrowers():
     print("All borrowers:")
-    borrowers = borrower.all()
+    borrowers = Borrower.all()
     if not borrowers:
-        print("No members found.")
+        print("No borrowers found.")
     for borrower in borrowers:
         print(borrower)
 
@@ -49,7 +51,7 @@ def borrow_book():
     borrower_name = input("Borrower name: ")
     book_name = input("Book name: ")
 
-    borrower = borrower.find_by_name(borrower_name)
+    borrower = Borrower.find_by_name(borrower_name)
     book = Book.find_by_name(book_name)
 
     if borrower and book:

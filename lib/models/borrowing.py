@@ -7,29 +7,29 @@ class Borrowing:
             CREATE TABLE IF NOT EXISTS borrowings (
                 id INTEGER PRIMARY KEY,
                 book_id INTEGER,
-                member_id INTEGER,
+                borrower_id INTEGER,
                 FOREIGN KEY(book_id) REFERENCES books(id),
-                FOREIGN KEY(member_id) REFERENCES members(id)
+                FOREIGN KEY(borrower_id) REFERENCES borrower(id)
             );
         """
         CURSOR.execute(sql)
         CONN.commit()
 
     @classmethod
-    def borrow(cls, book_id, member_id):
+    def borrow(cls, book_id, borrower_id):
         CURSOR.execute(
-            "INSERT INTO borrowings (book_id, member_id) VALUES (?, ?)",
-            (book_id, member_id)
+            "INSERT INTO borrowings (book_id, borrower_id) VALUES (?, ?)",
+            (book_id, borrower_id)
         )
         CONN.commit()
 
     @classmethod
     def borrowed_books(cls):
         sql = """
-            SELECT books.name, members.name
+            SELECT books.name, borrowers.name
             FROM borrowings
             JOIN books ON borrowings.book_id = books.id
-            JOIN members ON borrowings.member_id = members.id;
+            JOIN borrowers ON borrowings.borrower_id = borrowers.id;
         """
         CURSOR.execute(sql)
         return CURSOR.fetchall()

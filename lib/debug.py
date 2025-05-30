@@ -4,7 +4,12 @@ from models.authors import Author
 from models.borrowers import Borrower
 from models.borrowing import Borrowing
 
-Book.drop_table()
+CURSOR = CONN.cursor()
+CURSOR.execute("DROP TABLE IF EXISTS borrowings")
+CURSOR.execute("DROP TABLE IF EXISTS books")
+CURSOR.execute("DROP TABLE IF EXISTS borrowers")
+CURSOR.execute("DROP TABLE IF EXISTS authors")
+CONN.commit()
 
 Author.create_table()
 Book.create_table()
@@ -31,25 +36,25 @@ books = [
 for book in books:
     book.save()
 
-Borrowers = [
+borrowers = [
     Borrower(name="Bruise Wayne"),
     Borrower(name="Kendrik"),
     Borrower(name="Diddy")
 ]
-for member in Borrowers:
-    member.save()
+for borrower in borrowers:
+    borrower.save()
 
-Borrowing.borrow(books[0].id, Borrowers[0].id)  
-Borrowing.borrow(books[1].id, Borrowers[0].id)  
-Borrowing.borrow(books[2].id, Borrowers[1].id)  
-Borrowing.borrow(books[5].id, Borrowers[1].id)  
-Borrowing.borrow(books[4].id, Borrowers[2].id)  
-Borrowing.borrow(books[3].id, Borrowers[2].id)
+Borrowing.borrow(books[0].id, borrowers[0].id)  
+Borrowing.borrow(books[1].id, borrowers[0].id)  
+Borrowing.borrow(books[2].id, borrowers[1].id)  
+Borrowing.borrow(books[5].id, borrowers[1].id)  
+Borrowing.borrow(books[4].id, borrowers[2].id)  
+Borrowing.borrow(books[3].id, borrowers[2].id)
 
 print(" Borrowed Books:")
 borrowed = Borrowing.borrowed_books()
-for book_title, Borrower_name in borrowed:
-    print(f"{book_title}  lent to : {Borrower_name}")
+for book_title, borrower_name in borrowed:
+    print(f"{book_title}:  Borrowed By : {borrower_name}")
 
 
 
